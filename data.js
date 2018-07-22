@@ -1,3 +1,4 @@
+const data =
 [
   "This"
   ,
@@ -7,3 +8,4 @@
   ,
   "test"
 ]
+;
