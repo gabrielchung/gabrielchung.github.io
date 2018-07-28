@@ -2,16 +2,23 @@
 <head>
   <title>Editor</title>
   <script>
+    const c_local_storage_key = 'editor';
+    var prt = function(input) { document.getElementById('result').value += input; };
+    function load() {
+      document.getElementById('editor').value = localStorage.getItem(c_local_storage_key);
+    }
     function run() {
-       document.getElementById('result').value = document.getElementById('editor').value;
+      localStorage.setItem(c_local_storage_key, document.getElementById('editor').value);
+      eval(document.getElementById('editor').value);
     }
   </script>
 </head>
 <body>
   <textarea id="editor" style="width:100%; height:40%;"></textarea>
   <br />
-  <button onclick="run();">Run</button>
+  <button onclick="run();">Run and Save</button>
   <br />
-  <textarea id="result" style="width:100%; height:40%;"></textarea>
+  <textarea id="result" style="width:100%; height:40%; background-color:#ccc;"></textarea>
 </body>
+<script>load();</script>
 </html>
