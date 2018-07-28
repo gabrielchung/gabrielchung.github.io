@@ -6,6 +6,8 @@ const data =
   ,
   "a"
   ,
-  "test"
+  "test."
+  ,
+  "yeah!"
 ]
 ;
