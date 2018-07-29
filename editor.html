@@ -7,6 +7,8 @@
     body {
       width: 100%;
       height: 100%;
+      margin: 0;
+      padding: 0;
     }
   </style>
   <script>
@@ -20,6 +22,12 @@
     }
     function load() {
       document.getElementById('editor').value = localStorage.getItem(c_local_storage_key);
+    }
+    function set_width_for_textareas() {
+      var textarea_list = document.getElementsByTagName('textarea');
+      for (var i=0; i<textarea_list.length; i++) {
+        textarea_list[i].style.width = document.body.clientWidth;
+      }
     }
     function run() {
       localStorage.setItem(c_local_storage_key, document.getElementById('editor').value);
@@ -40,5 +48,5 @@
   <br />
   <textarea id="result" style="width:100%; height:10%; background-color:#ddd;"></textarea>
 </body>
-<script>load();</script>
+<script>load();set_width_for_textareas();</script>
 </html>
