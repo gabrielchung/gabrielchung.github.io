@@ -5,11 +5,15 @@
   <script>
     const c_local_storage_key = 'editor';
     var prt = function(input) { document.getElementById('result').value += input; };
+    function clear_result() {
+      document.getElementById('result').value = '';
+    }
     function load() {
       document.getElementById('editor').value = localStorage.getItem(c_local_storage_key);
     }
     function run() {
       localStorage.setItem(c_local_storage_key, document.getElementById('editor').value);
+      clear_result();
       eval(document.getElementById('editor').value);
     }
   </script>
