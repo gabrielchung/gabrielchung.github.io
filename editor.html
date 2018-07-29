@@ -9,7 +9,7 @@
       document.getElementById('result').value = '';
     }
     function show_timestamp() {
-      document.getElementById('run_timestamp').value = Date().toString();
+      document.getElementById('run_timestamp').innerHTML = Date().toString();
     }
     function load() {
       document.getElementById('editor').value = localStorage.getItem(c_local_storage_key);
@@ -29,7 +29,7 @@
     spellcheck="false"
     autocorrect="off"></textarea>
   <br />
-  <button onclick="run();">Run and Save</button> <span id="run_timestamp" style="font-color:red"></span>
+  <button onclick="run();">Run and Save</button> <span id="run_timestamp" style="color:red"></span>
   <br />
   <textarea id="result" style="width:100%; height:10%; background-color:#ddd;"></textarea>
 </body>
