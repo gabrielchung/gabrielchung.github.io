@@ -31,6 +31,46 @@
                 text-align: right;
             }
         </style>
+        <script src="data.js"></script>
+        <script>
+            console.log(data);
+            
+            function populate_data_to_table() {
+                if (data != undefined) {
+                    const num_of_col = data[0].length;
+                    const num_of_row = data.length;
+                    const tbody = document.getElementById('tbody');
+                    var tr;
+                    var td;
+                    var a;
+                    var field_content;
+
+                    // skipping the first row as it is the heading row
+                    for (var ri=1; ri<num_of_row; ri++) {
+
+                        tr = document.createElement('tr');
+
+                        for (var ci=0; ci<num_of_col; ci++) {
+                            td = document.createElement('td');
+                            field_content = data[ri][ci];
+                            if (field_content.indexOf('http') === 0) {
+                                a = document.createElement('a');
+                                a.href = field_content;
+                                a.target = "_blank";
+                                a.textContent = field_content
+                                td.appendChild(a);
+                            } else {
+                                td.textContent = data[ri][ci];
+                            }
+                            tr.appendChild(td);
+                        }
+
+                        tbody.appendChild(tr);
+                    }
+                }
+            }
+
+        </script>
     </head>
     <body>
         <div>
@@ -54,27 +94,39 @@
                             <option>44444</option>
                             <option>55555</option>
                         </select>
+                        Type
+                        <select>
+                            <option>11111</option>
+                            <option>22222</option>
+                            <option>33333</option>
+                            <option>44444</option>
+                            <option>55555</option>
+                        </select>
                         Tag
                         <input type="text" />
                     </div>
                     <div>
                         <table>
-                            <tr>
-                                <th>Area</th>
-                                <th>Use Case</th>
-                                <th>App Title</th>
-                                <th>Description</th>
-                                <th>Link</th>
-                                <th>Tags</th>
-                            </tr>
-                            <tr>
+                            <thead>
+                                <tr>
+                                    <th>Area</th>
+                                    <th>Use Case</th>
+                                    <th>Type</th>
+                                    <th>Title</th>
+                                    <th>Link</th>
+                                    <th>Tags</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                            <!-- <tr>
                                 <td>11111</td>
                                 <td>22222</td>
                                 <td>33333</td>
                                 <td>44444</td>
                                 <td>55555</td>
                                 <td>66666</td>
-                            </tr>
+                            </tr> -->
                         </table>
                     </div>
                 </div>
@@ -84,4 +136,5 @@
             </div>
         </div>
     </body>
+    <script>populate_data_to_table();</script>
 </html>
