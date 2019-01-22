@@ -3,7 +3,7 @@
 <!--
 
   * JS Eval
-  * 2019-01-22 Build 00002
+  * 2019-01-22 Build 00004
 
 -->
 
@@ -27,7 +27,14 @@
       height: 150px;
       width: 100%;
     }
-
+    #run_ts {
+      display: none;
+    }
+    #app_version {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
   </style>
 
 </head>
@@ -37,6 +44,8 @@
 
   <h1>JS Eval</h1>
 
+  <span id="app_version">Version: 2019-01-22 Build 00004</span>
+
   <textarea id="result">Result ...</textarea>
 
   <br />
@@ -45,15 +54,26 @@
 
   <br />
 
-  <button onclick="my_eval();">Run</button>
+  <button onclick="run_code();">Run</button>
   <button onclick="clear_code();">Clear</button>
   <button onclick="put_sample_code();">Sample Code</button>
+  
+  <br />
+
+  <span id="run_ts">Run at: <span id="run_ts_value"></span></span>
 
   <script>
     const line_feed = '\n';
 
     function my_console_log(input_text) {
       document.getElementById('result').value += input_text + line_feed;
+    }
+
+    function run_code() {
+      clear_result();
+      document.getElementById('run_ts_value').innerHTML = (new Date()).toString();
+      document.getElementById('run_ts').style.display = 'block';
+      my_eval();
     }
 
     function my_eval() {
@@ -63,9 +83,14 @@
       console.log = default_console_log;
     }
 
+    function clear_result() {
+      document.getElementById('result').value = '';
+    }
+
     function clear_code() {
       document.getElementById('result').value = 'Result ...';
       document.getElementById('code').value = ''
+      document.getElementById('run_ts').style.display = 'none';
     }
 
     function put_sample_code() {
@@ -79,6 +104,9 @@
       sample_code += line_feed;
       sample_code += 'foo ++;' + line_feed;
       sample_code += 'console.log(foo);' + line_feed;
+      sample_code += line_feed;
+      sample_code += '// Show TS in result ' + line_feed;
+      sample_code += 'console.log(new Date());' + line_feed;
 
       document.getElementById('code').value = sample_code;
     }
