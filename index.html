@@ -1,4 +1,87 @@
-<h1>Hello, World</h1>
-<div id="div_main"></div>
-<script src="data.js"></script>
-<script>document.getElementById('div_main').innerHTML = JSON.stringify(data);</script>
+<!doctype html>
+
+<!--
+
+  * JS Eval
+  * 2019-01-22 Build 00001
+
+-->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Mobile IDE</title>
+  <meta name="description" content="Mobile Integrated Development Environment">
+  <meta name="author" content="Gabriel Chung">
+
+  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+
+  <style>
+    html * {
+      margin: 0;
+      padding: 0;
+    }
+    textarea {
+      height: 150px;
+      width: 100%;
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <!-- <script src="js/scripts.js"></script> -->
+
+  <h1>JS Eval</h1>
+
+  <textarea id="result">Result ...</textarea>
+
+  <br />
+
+  <textarea id="code">console.log('Hello World');</textarea>
+
+  <br />
+
+  <button onclick="my_eval();">Run</button>
+  <button onclick="clear_code();">Clear</button>
+  <button onclick="put_sample_code();">Sample Code</button>
+
+  <script>
+    const line_feed = '\n';
+
+    function my_console_log(input_text) {
+      document.getElementById('result').value += input_text + line_feed;
+    }
+
+    function my_eval() {
+      default_console_log = console.log;
+      console.log = my_console_log;
+      eval(document.getElementById('code').value);
+      console.log = default_console_log;
+    }
+
+    function clear_code() {
+      document.getElementById('result').value = 'Result ...';
+      document.getElementById('code').value = ''
+    }
+
+    function put_sample_code() {
+      
+      var sample_code = '';
+
+      sample_code += 'var foo;' + line_feed;
+      sample_code += line_feed;
+      sample_code += 'foo = 5;' + line_feed;
+      sample_code += 'console.log(foo);' + line_feed;
+      sample_code += line_feed;
+      sample_code += 'foo ++;' + line_feed;
+      sample_code += 'console.log(foo);' + line_feed;
+
+      document.getElementById('code').value = sample_code;
+    }
+  </script>
+
+</body>
+</html>
