@@ -1,12 +1,4 @@
 <!doctype html>
-
-<!--
-
-  * JS Eval
-  * 2019-01-22 Build 00004
-
--->
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -44,29 +36,38 @@
 
   <h1>JS Eval</h1>
 
-  <span id="app_version">Version: 2019-01-22 Build 00004</span>
+  <span id="app_version">Version: 2019-01-24 Build 00005</span>
 
   <textarea id="result">Result ...</textarea>
 
   <br />
 
-  <textarea id="code">console.log('Hello World');</textarea>
+  <textarea id="code" autocapitalize="off"
+    autocomplete="off"
+    spellcheck="false"
+    autocorrect="off">console.log('Hello World');</textarea>
 
   <br />
 
   <button onclick="run_code();">Run</button>
   <button onclick="clear_code();">Clear</button>
   <button onclick="put_sample_code();">Sample Code</button>
-  
+
+  <br />
+
+  <button onclick="load();">Load</button>
+  <button onclick="save();">Save</button>
+
   <br />
 
   <span id="run_ts">Run at: <span id="run_ts_value"></span></span>
 
   <script>
-    const line_feed = '\n';
+    const c_line_feed = '\n';
+    const c_local_storage_key = 'code';
 
     function my_console_log(input_text) {
-      document.getElementById('result').value += input_text + line_feed;
+      document.getElementById('result').value += input_text + c_line_feed;
     }
 
     function run_code() {
@@ -97,18 +98,25 @@
       
       var sample_code = '';
 
-      sample_code += 'var foo;' + line_feed;
-      sample_code += line_feed;
-      sample_code += 'foo = 5;' + line_feed;
-      sample_code += 'console.log(foo);' + line_feed;
-      sample_code += line_feed;
-      sample_code += 'foo ++;' + line_feed;
-      sample_code += 'console.log(foo);' + line_feed;
-      sample_code += line_feed;
-      sample_code += '// Show TS in result ' + line_feed;
-      sample_code += 'console.log(new Date());' + line_feed;
+      sample_code += 'var foo;' + c_line_feed;
+      sample_code += c_line_feed;
+      sample_code += 'foo = 5;' + c_line_feed;
+      sample_code += 'console.log(foo);' + c_line_feed;
+      sample_code += c_line_feed;
+      sample_code += 'foo ++;' + c_line_feed;
+      sample_code += 'console.log(foo);' + c_line_feed;
+      sample_code += c_line_feed;
+      sample_code += '// Show TS in result ' + c_line_feed;
+      sample_code += 'console.log(new Date());' + c_line_feed;
 
       document.getElementById('code').value = sample_code;
+    }
+
+    function load() {
+      document.getElementById('code').value = localStorage.getItem(c_local_storage_key);
+    }
+    function save() {
+      localStorage.setItem(c_local_storage_key, document.getElementById('code').value);
     }
   </script>
 
