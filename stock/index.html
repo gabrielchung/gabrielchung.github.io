@@ -1,0 +1,167 @@
+<html>
+  <body>
+    <h1>Stock Checker</h1>
+    <button onclick="load_data();">Load Data</button>
+    <button onclick="analyze_data();">Analyze Stock</button>
+    <div id="test"></div>
+  </body>
+  <script>
+    const demo_api_key = '8YYR8ZFPJNGO2H8P';
+    const show_price_flag = true;
+
+    function load_data() {
+      var stock_data = get_stock_data('AAPL');
+    }
+
+    function analyze_data() {
+      analyze_stock('AAPL', 10);
+    }
+
+    function update_stock_data(stock_code, stock_data) {
+      console.log(stock_data);
+      localStorage.setItem(stock_code, JSON.stringify(stock_data));
+      document.getElementById('test').innerHTML = JSON.stringify(stock_data, null, 2);
+    }
+    function get_stock_data(stock_code) {
+      var get_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' + stock_code + '&apikey=' + demo_api_key;
+      console.log(get_url);
+      get_ajax(get_url, function(data){
+        update_stock_data(stock_code, JSON.parse(data));
+      });
+    }
+    function get_ajax(url, success) {
+	    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	    xhr.open('GET', url);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
+	    };
+	    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	    xhr.send();
+	    return xhr;
+  }
+  function clean_data(data_obj) {
+    console.log(data_obj);
+    var result = [];
+    var curr_obj;
+    data_obj.forEach(curr_day_data_obj => {
+      curr_obj = {};
+      Object.keys(curr_day_data_obj).forEach(curr_key => {
+        curr_obj[curr_key.substr(3)] = curr_day_data_obj[curr_key];
+      });
+      result.push(curr_obj);
+    });
+    return result;
+  }
+  function analyze_stock(stock_code, day_length) {
+    const data_str = localStorage.getItem(stock_code);
+    const data_obj = JSON.parse(data_str);
+    //const time_series = data_obj['time_series']['Time Series (Daily)'];
+    const time_series = data_obj['Time Series (Daily)'];
+    const date_list = Object.keys(time_series);
+
+    var date_data = [];
+    var raw_stock_data = [];
+
+    for (var i=0; i<day_length; i++) {
+      date_data.push(date_list[i]);
+    }
+
+    date_data = date_data.reverse();
+
+    var curr_date_data;
+
+    date_data.forEach( date => {
+      curr_date_data = JSON.parse(JSON.stringify(time_series[date]));
+      curr_date_data['date'] = date;
+      raw_stock_data.push(curr_date_data);
+    });
+
+    const stock_data = clean_data(raw_stock_data);
+
+    console.log(stock_data);
+
+    // get period low
+    var period_low = stock_data[0]['low'];
+    var period_low_date = stock_data[0]['date'];
+    var period_low_date_index = 0;
+
+    var curr_stock_data;
+
+    for (var i=0; i<stock_data.length; i++) {
+      curr_stock_data = stock_data[i];
+      if (curr_stock_data['low'] < period_low) {
+        period_low = curr_stock_data['low'];
+        period_low_date = curr_stock_data['date'];
+        period_low_date_index = i;
+      }
+    }
+
+    // console.log({period_low: {price: period_low, date: period_low_date, index: period_low_date_index}});
+
+    // get period high
+    var period_high = stock_data[0]['high'];
+    var period_high_date = stock_data[0]['date'];
+    var period_high_date_index = 0;
+
+    var curr_stock_data;
+
+    for (var i=0; i<stock_data.length; i++) {
+      curr_stock_data = stock_data[i];
+      if (curr_stock_data['high'] > period_high) {
+        period_high = curr_stock_data['high'];
+        period_high_date = curr_stock_data['date'];
+        period_high_date_index = i;
+      }
+    }
+
+    // console.log({period_high: {price: period_high, date: period_high_date, index: period_high_date_index}});
+
+    // start
+
+    var period_start = stock_data[0]['open'];
+    var period_start_date = stock_data[0]['date'];
+    var period_start_date_index = 0;
+
+    console.log();
+    console.log(stock_data[0]);
+    console.log();
+
+    const period_start_obj = {price: period_start, date: period_start_date, index: period_start_date_index};
+    if (show_price_flag) {
+      console.log({period_start: period_start_obj});
+    }
+
+    // end
+
+    var period_end = stock_data[stock_data.length-1]['close'];
+    var period_end_date = stock_data[stock_data.length-1]['date'];
+    var period_end_date_index = stock_data.length-1;
+
+    const period_end_obj = {price: period_end, date: period_end_date, index: period_end_date_index};
+    if (show_price_flag) {
+      console.log({period_end: period_end_obj});
+    }
+
+    // get period low-high difference
+    //
+    // Not needed for now
+
+    // get period start-end difference and percentage
+    const period_start_end_diff_obj = {
+                                        diff: period_end_obj['price'] - period_start_obj['price']
+                                        ,diff_percentage: (period_end_obj['price'] - period_start_obj['price']) / period_start_obj['price'] * 100
+                                      };
+
+    console.log(
+                JSON.stringify(
+                  {
+                    stock_code: stock_code
+                    ,period_start_end_diff: period_start_end_diff_obj
+                    ,period_start_date: period_start_date
+                    ,period_end_date: period_end_date
+                  }
+                )
+                  );
+  }
+  </script>
+</html>
