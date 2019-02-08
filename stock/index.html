@@ -1,16 +1,30 @@
+<!--
+  To-Do:
+  - Check what if there is load_data overload
+-->
 <html>
+  <head>
+    <style>
+      textarea { width:100%; height: 300px; }
+    </style>
+  </head>
   <body>
     <h1>Stock Checker</h1>
     <button onclick="create_new_bit_list()">Start New List</button>
     <button onclick="load_data();">Load Data</button>
+    <input type="checkbox" checked="false" id="auto_load_data" onchange="auto_load_data_onchange();"> Auto Load
+    <span id="count_down"></span>
+    <br />
+    <input type="text" value="10" id="day_length_for_analysis" />
     <button onclick="analyze_data();">Analyze Stock</button>
-    <div id="test"></div>
+    <br />
+    <textarea id="output"></textarea>
   </body>
   <script>
     //As of 2019 Feb 05
     //IVW - S&P Growth ETF
     const list_key = 'my_stock_list';
-    const s_and_p_500_growth = ["MSFT", "AMZN", "FB", "GOOG", "GOOGL", "V", "PFE", "VZ", "BA", "CSCO", "JNJ", "MRK", "MA", "BRKB", "XOM", "NFLX", "INTC", "MCD", "PG", "ABT", "ADBE", "CRM", "UNP", "MDT", "LLY", "AVGO", "PYPL", "TMO", "KO", "PEP", "HD", "DIS", "NEE", "COP", "AMGN", "USB", "CMCSA", "AMT", "ORCL", "TXN", "ADP", "ABBV", "LIN", "TJX", "PM", "MMM", "ISRG", "INTU", "HON", "CSX", "NKE", "BSX", "OXY", "SPGI", "NVDA", "VRTX", "UTX", "ACN", "LMT", "ICE", "SBUX", "BKNG", "BMY", "HUM", "ILMN", "BDX", "CI", "ECL", "SPG", "WM", "DHR", "HCA", "UPS", "APD", "BIIB", "AXP", "LOW", "FIS", "EW", "FISV", "ADSK", "SYK", "CL", "QCOM", "NSC", "RHT", "PSA", "ROP", "DG", "YUM", "MMC", "SCHW", "STZ", "WELL", "CELG", "ORLY", "XLNX", "VFC", "ALXN", "CHTR", "D", "AON", "IR", "TWTR", "APC", "ZBH", "FOXA", "ZTS", "MNST", "EL", "HLT", "AZO", "SHW", "RTN", "KMB", "PGR", "AMD", "CCI", "TDG", "ADI", "FDX", "ROST", "SYY", "MSI", "CLX", "REGN", "EQIX", "INFO", "VRSN", "EQR", "AVB", "CERN", "GPN", "IDXX", "FAST", "AME", "XTSLA", "NTAP", "AEE", "ITW", "CTAS", "ULTA", "FRC", "ETN", "FANG", "OKE", "ABMD", "MSCI", "BAX", "MKC", "DFS", "K", "HCP", "IQV", "O", "CHD", "PAYX", "KEYS", "ANSS", "WCG", "GWW", "ESS", "VRSK", "RMD", "CTXS", "EA", "MRO", "MCO", "MAR", "CXO", "CMG", "A", "DLR", "IT", "XYL", "DVN", "APTV", "TFX", "SIVB", "APA", "EXPD", "TTWO", "VAR", "XEL", "BR", "EBAY", "ES", "SBAC", "BLL", "NRG", "FTNT", "PPG", "ANET", "HRL", "TROW", "AKAM", "WEC", "FOX", "TSCO", "AWK", "BXP", "FLT", "CBOE", "NTRS", "LW", "WAT", "TSS", "MTD", "APH", "ROK", "MCHP", "FFIV", "PNW", "HRS", "AJG", "AMP", "LLL", "DRI", "EXPE", "MXIM", "HSY", "HFC", "ALGN", "KLAC", "ADS", "SNPS", "SWKS", "CMS", "CDNS", "EXR", "EFX", "BFB", "FCX", "AIV", "AAP", "TPR", "STX", "HES", "COG", "RSG", "CPRT", "DRE", "DVA", "ETFC", "USD", "CE", "NDAQ", "INCY", "MLM", "UDR", "VMC", "HOLX", "UHS", "MAA", "JBHT", "HST", "VNO", "EMN", "HAS", "CINF", "LNT", "CMA", "COO", "URI", "ROL", "HSIC", "PKI", "MOS", "GRMN", "FMC", "JKHY", "REG", "KMX", "MAS", "NWL", "FRT", "KSU", "TIF", "ALLE", "CF", "TRIP", "AVY", "XEC", "TMK", "RHI", "WU", "M", "FL", "FLS", "HRB", "JWN", "UAA", "HBI", "UA", "MAT", "NFX", "MSFUT", "ESH9"];
+    const s_and_p_500_growth = ["MSFT", "AMZN", "FB", "GOOG", "GOOGL", "V", "PFE", "VZ", "BA", "CSCO", "JNJ", "MRK", "MA", "BRK-B", "XOM", "NFLX", "INTC", "MCD", "PG", "ABT", "ADBE", "CRM", "UNP", "MDT", "LLY", "AVGO", "PYPL", "TMO", "KO", "PEP", "HD", "DIS", "NEE", "COP", "AMGN", "USB", "CMCSA", "AMT", "ORCL", "TXN", "ADP", "ABBV", "LIN", "TJX", "PM", "MMM", "ISRG", "INTU", "HON", "CSX", "NKE", "BSX", "OXY", "SPGI", "NVDA", "VRTX", "UTX", "ACN", "LMT", "ICE", "SBUX", "BKNG", "BMY", "HUM", "ILMN", "BDX", "CI", "ECL", "SPG", "WM", "DHR", "HCA", "UPS", "APD", "BIIB", "AXP", "LOW", "FIS", "EW", "FISV", "ADSK", "SYK", "CL", "QCOM", "NSC", "RHT", "PSA", "ROP", "DG", "YUM", "MMC", "SCHW", "STZ", "WELL", "CELG", "ORLY", "XLNX", "VFC", "ALXN", "CHTR", "D", "AON", "IR", "TWTR", "APC", "ZBH", "FOXA", "ZTS", "MNST", "EL", "HLT", "AZO", "SHW", "RTN", "KMB", "PGR", "AMD", "CCI", "TDG", "ADI", "FDX", "ROST", "SYY", "MSI", "CLX", "REGN", "EQIX", "INFO", "VRSN", "EQR", "AVB", "CERN", "GPN", "IDXX", "FAST", "AME", "XTSLA", "NTAP", "AEE", "ITW", "CTAS", "ULTA", "FRC", "ETN", "FANG", "OKE", "ABMD", "MSCI", "BAX", "MKC", "DFS", "K", "HCP", "IQV", "O", "CHD", "PAYX", "KEYS", "ANSS", "WCG", "GWW", "ESS", "VRSK", "RMD", "CTXS", "EA", "MRO", "MCO", "MAR", "CXO", "CMG", "A", "DLR", "IT", "XYL", "DVN", "APTV", "TFX", "SIVB", "APA", "EXPD", "TTWO", "VAR", "XEL", "BR", "EBAY", "ES", "SBAC", "BLL", "NRG", "FTNT", "PPG", "ANET", "HRL", "TROW", "AKAM", "WEC", "FOX", "TSCO", "AWK", "BXP", "FLT", "CBOE", "NTRS", "LW", "WAT", "TSS", "MTD", "APH", "ROK", "MCHP", "FFIV", "PNW", "HRS", "AJG", "AMP", "LLL", "DRI", "EXPE", "MXIM", "HSY", "HFC", "ALGN", "KLAC", "ADS", "SNPS", "SWKS", "CMS", "CDNS", "EXR", "EFX", "BFB", "FCX", "AIV", "AAP", "TPR", "STX", "HES", "COG", "RSG", "CPRT", "DRE", "DVA", "ETFC", "USD", "CE", "NDAQ", "INCY", "MLM", "UDR", "VMC", "HOLX", "UHS", "MAA", "JBHT", "HST", "VNO", "EMN", "HAS", "CINF", "LNT", "CMA", "COO", "URI", "ROL", "HSIC", "PKI", "MOS", "GRMN", "FMC", "JKHY", "REG", "KMX", "MAS", "NWL", "FRT", "KSU", "TIF", "ALLE", "CF", "TRIP", "AVY", "XEC", "TMK", "RHI", "WU", "M", "FL", "FLS", "HRB", "JWN", "UAA", "HBI", "UA", "MAT", "NFX", "MSFUT", "ESH9"];
 
     const demo_api_key = '8YYR8ZFPJNGO2H8P';
     const show_price_flag = false;
@@ -26,6 +40,58 @@
 
     // const month_str = (month.toString().length === 1 ? '0' : '') + month.toString();
     // const day_str = (day.toString().length === 1 ? '0' : '') + day.toString();
+
+    show_console_log_on_screen();
+
+    function start_count_down() {
+      setInterval(function() {
+        const count_down = document.getElementById('count_down');
+        if ((count_down.innerHTML === '') || (count_down.innerHTML === '0')) {
+          count_down.innerHTML = 59;
+        } else {
+          count_down.innerHTML = parseInt(count_down.innerHTML) - 1;
+        }
+      }, 1000);
+    }
+
+    function auto_load_data_onchange() {
+      if (document.getElementById('auto_load_data').checked) {
+
+        load_data();
+
+        start_count_down();
+
+        setInterval(get_stock_data_for_auto_load, 60000);
+
+      } else {
+        
+        clearInterval();
+
+        const count_down = document.getElementById('count_down');
+        count_down.innerHTML = '';
+      }
+    }
+
+    // setInterval(get_stock_data_for_auto_load, 60000);
+
+    function get_stock_data_for_auto_load() {
+      if (document.getElementById('auto_load_data').checked) {
+        load_data();
+      }
+    }
+
+    function log_output_on_screen(text) {
+      const output_textarea = document.getElementById('output');
+      output_textarea.value += text + '\n';
+    }
+
+    function show_console_log_on_screen() {
+      const original_log_func = console.log;
+      console.log = function(text) {
+        original_log_func(text);
+        log_output_on_screen(text);
+      }
+    }
 
     function create_new_bit_list() {
       var empty_array = [];
@@ -100,32 +166,24 @@
     function analyze_data() {
       var bit_list = get_bit_list();
       var curr_stock_code;
+      const day_length = parseInt(document.getElementById('day_length_for_analysis').value);
+      console.log('Day length: ' + day_length)
 
       for (var i=0; i<bit_list.length; i++) {
         if (bit_list[i] === true) {
-
           curr_stock_code = s_and_p_500_growth[i];
-
-          analyze_stock(curr_stock_code, 10);
-
+          analyze_stock(curr_stock_code, day_length);
         }
       }
     }
 
     function update_stock_data(stock_code, stock_data) {
-      // console.log(stock_data);
       console.log(Object.keys(stock_data['Time Series (Daily)']));
-      // localStorage.setItem('curr_date_str', Object.keys(stock_data['Time Series (Daily)'])[0]);
       localStorage.setItem(stock_code, JSON.stringify(stock_data));
-      document.getElementById('test').innerHTML = JSON.stringify(stock_data, null, 2);
+      // document.getElementById('test').innerHTML = JSON.stringify(stock_data, null, 2);
     }
 
     function get_stock_data(stock_code) {
-      
-      // if (is_up_to_date(stock_code)) {
-      //   return;
-      // }
-
       var get_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' + stock_code + '&apikey=' + demo_api_key;
       // console.log(get_url);
       get_ajax(get_url, function(data){
@@ -143,41 +201,6 @@
 	    xhr.send();
 	    return xhr;
   }
-
-  // function is_up_to_date(stock_code) {
-  //   console.log(0);
-
-  //   // we get curr date str for the 1 run of every batch
-  //   // if (localStorage.getItem('curr_date_str') === null) {
-  //   //   return false;
-  //   // }
-
-  //   const data_str = localStorage.getItem(stock_code);
-
-  //   if (data_str === null) {
-  //     console.log(1);
-  //     return false; // if no such key exists in the local storage, it will return null.
-  //   }
-
-  //   if ( ! is_json_str(data_str) ) {
-  //     console.log(2);
-  //     return false;
-  //   }
-
-  //   const data_obj = JSON.parse(data_str);
-
-  //   if ( data_obj['Time Series (Daily)'] == undefined) {
-  //     console.log(3);
-  //     return false;
-  //   }
-
-  //   const time_series = data_obj['Time Series (Daily)'];
-
-  //   console.log(Object.keys(time_series)[0]);
-  //   console.log(curr_date_str);
-
-  //   return (Object.keys(time_series)[0] === curr_date_str);
-  // }
 
   function clean_data(data_obj) {
     // console.log(data_obj);
@@ -276,9 +299,8 @@
     // console.log({period_high: {price: period_high, date: period_high_date, index: period_high_date_index}});
 
     // start
-
     var period_start = stock_data[0]['open'];
-    var period_start_date = stock_data[0]['date'];
+    var period_start_date = stock_data[0]['e'];
     var period_start_date_index = 0;
 
     // console.log();
@@ -293,7 +315,7 @@
     // end
 
     var period_end = stock_data[stock_data.length-1]['close'];
-    var period_end_date = stock_data[stock_data.length-1]['date'];
+    var period_end_date = stock_data[stock_data.length-1]['e'];
     var period_end_date_index = stock_data.length-1;
 
     const period_end_obj = {price: period_end, date: period_end_date, index: period_end_date_index};
@@ -307,8 +329,8 @@
 
     // get period start-end difference and percentage
     const period_start_end_diff_obj = {
-                                        diff: period_end_obj['price'] - period_start_obj['price']
-                                        ,diff_percentage: (period_end_obj['price'] - period_start_obj['price']) / period_start_obj['price'] * 100
+                                        diff: (period_end_obj['price'] - period_start_obj['price']).toFixed(3)
+                                        ,diff_percentage: ((period_end_obj['price'] - period_start_obj['price']) / period_start_obj['price'] * 100).toFixed(3)
                                       };
 
     console.log(
