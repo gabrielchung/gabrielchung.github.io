@@ -1,34 +1,138 @@
 <html>
   <body>
     <h1>Stock Checker</h1>
+    <button onclick="create_new_bit_list()">Start New List</button>
     <button onclick="load_data();">Load Data</button>
     <button onclick="analyze_data();">Analyze Stock</button>
     <div id="test"></div>
   </body>
   <script>
+    //As of 2019 Feb 05
+    //IVW - S&P Growth ETF
+    const list_key = 'my_stock_list';
+    const s_and_p_500_growth = ["MSFT", "AMZN", "FB", "GOOG", "GOOGL", "V", "PFE", "VZ", "BA", "CSCO", "JNJ", "MRK", "MA", "BRKB", "XOM", "NFLX", "INTC", "MCD", "PG", "ABT", "ADBE", "CRM", "UNP", "MDT", "LLY", "AVGO", "PYPL", "TMO", "KO", "PEP", "HD", "DIS", "NEE", "COP", "AMGN", "USB", "CMCSA", "AMT", "ORCL", "TXN", "ADP", "ABBV", "LIN", "TJX", "PM", "MMM", "ISRG", "INTU", "HON", "CSX", "NKE", "BSX", "OXY", "SPGI", "NVDA", "VRTX", "UTX", "ACN", "LMT", "ICE", "SBUX", "BKNG", "BMY", "HUM", "ILMN", "BDX", "CI", "ECL", "SPG", "WM", "DHR", "HCA", "UPS", "APD", "BIIB", "AXP", "LOW", "FIS", "EW", "FISV", "ADSK", "SYK", "CL", "QCOM", "NSC", "RHT", "PSA", "ROP", "DG", "YUM", "MMC", "SCHW", "STZ", "WELL", "CELG", "ORLY", "XLNX", "VFC", "ALXN", "CHTR", "D", "AON", "IR", "TWTR", "APC", "ZBH", "FOXA", "ZTS", "MNST", "EL", "HLT", "AZO", "SHW", "RTN", "KMB", "PGR", "AMD", "CCI", "TDG", "ADI", "FDX", "ROST", "SYY", "MSI", "CLX", "REGN", "EQIX", "INFO", "VRSN", "EQR", "AVB", "CERN", "GPN", "IDXX", "FAST", "AME", "XTSLA", "NTAP", "AEE", "ITW", "CTAS", "ULTA", "FRC", "ETN", "FANG", "OKE", "ABMD", "MSCI", "BAX", "MKC", "DFS", "K", "HCP", "IQV", "O", "CHD", "PAYX", "KEYS", "ANSS", "WCG", "GWW", "ESS", "VRSK", "RMD", "CTXS", "EA", "MRO", "MCO", "MAR", "CXO", "CMG", "A", "DLR", "IT", "XYL", "DVN", "APTV", "TFX", "SIVB", "APA", "EXPD", "TTWO", "VAR", "XEL", "BR", "EBAY", "ES", "SBAC", "BLL", "NRG", "FTNT", "PPG", "ANET", "HRL", "TROW", "AKAM", "WEC", "FOX", "TSCO", "AWK", "BXP", "FLT", "CBOE", "NTRS", "LW", "WAT", "TSS", "MTD", "APH", "ROK", "MCHP", "FFIV", "PNW", "HRS", "AJG", "AMP", "LLL", "DRI", "EXPE", "MXIM", "HSY", "HFC", "ALGN", "KLAC", "ADS", "SNPS", "SWKS", "CMS", "CDNS", "EXR", "EFX", "BFB", "FCX", "AIV", "AAP", "TPR", "STX", "HES", "COG", "RSG", "CPRT", "DRE", "DVA", "ETFC", "USD", "CE", "NDAQ", "INCY", "MLM", "UDR", "VMC", "HOLX", "UHS", "MAA", "JBHT", "HST", "VNO", "EMN", "HAS", "CINF", "LNT", "CMA", "COO", "URI", "ROL", "HSIC", "PKI", "MOS", "GRMN", "FMC", "JKHY", "REG", "KMX", "MAS", "NWL", "FRT", "KSU", "TIF", "ALLE", "CF", "TRIP", "AVY", "XEC", "TMK", "RHI", "WU", "M", "FL", "FLS", "HRB", "JWN", "UAA", "HBI", "UA", "MAT", "NFX", "MSFUT", "ESH9"];
+
     const demo_api_key = '8YYR8ZFPJNGO2H8P';
-    const show_price_flag = true;
+    const show_price_flag = false;
+
+    // Get current date
+    // var dateObj = new Date();
+
+    // const month = dateObj.getUTCMonth() + 1; //months from 1-12
+    // const day = dateObj.getUTCDate();
+    // const year = dateObj.getUTCFullYear();
+
+    // const hour = dateObj.getUTCHours();
+
+    // const month_str = (month.toString().length === 1 ? '0' : '') + month.toString();
+    // const day_str = (day.toString().length === 1 ? '0' : '') + day.toString();
+
+    function create_new_bit_list() {
+      var empty_array = [];
+
+      s_and_p_500_growth.forEach(a=>{
+        empty_array.push(false);
+      });
+
+      localStorage.setItem(list_key, JSON.stringify(empty_array));
+    }
+
+    function get_bit_list() {
+      var bit_list = localStorage.getItem(list_key);
+      if (bit_list === null) {
+        create_new_bit_list();
+        return get_bit_list();
+      } else {
+        return JSON.parse(bit_list);
+      }
+    }
+
+    function mark_true_bit_in_bit_list(index) {
+      var bit_list = get_bit_list();
+      bit_list[index] = true;
+      localStorage.setItem(list_key, JSON.stringify(bit_list));
+    }
+
+    function is_json_str(input_str) {
+      try {
+        JSON.parse(input_str);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function is_json_str(input_str) {
+      try {
+        JSON.parse(input_str);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
 
     function load_data() {
-      var stock_data = get_stock_data('AAPL');
+      // s_and_p_500_growth.forEach(curr_stock_code => {
+      var bit_list = get_bit_list();
+      var curr_stock_code;
+
+      var data_load_counter = 0;
+
+      for (var i=0; i<bit_list.length; i++) {
+        if (bit_list[i] === false) {
+
+          if (data_load_counter >= 5) {
+            return;
+          }
+
+          curr_stock_code = s_and_p_500_growth[i];
+          
+          mark_true_bit_in_bit_list(i);
+
+          console.log(curr_stock_code);
+          get_stock_data(curr_stock_code);
+
+          data_load_counter ++;
+        }
+      }
     }
 
     function analyze_data() {
-      analyze_stock('AAPL', 10);
+      var bit_list = get_bit_list();
+      var curr_stock_code;
+
+      for (var i=0; i<bit_list.length; i++) {
+        if (bit_list[i] === true) {
+
+          curr_stock_code = s_and_p_500_growth[i];
+
+          analyze_stock(curr_stock_code, 10);
+
+        }
+      }
     }
 
     function update_stock_data(stock_code, stock_data) {
-      console.log(stock_data);
+      // console.log(stock_data);
+      console.log(Object.keys(stock_data['Time Series (Daily)']));
+      // localStorage.setItem('curr_date_str', Object.keys(stock_data['Time Series (Daily)'])[0]);
       localStorage.setItem(stock_code, JSON.stringify(stock_data));
       document.getElementById('test').innerHTML = JSON.stringify(stock_data, null, 2);
     }
+
     function get_stock_data(stock_code) {
+      
+      // if (is_up_to_date(stock_code)) {
+      //   return;
+      // }
+
       var get_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' + stock_code + '&apikey=' + demo_api_key;
-      console.log(get_url);
+      // console.log(get_url);
       get_ajax(get_url, function(data){
         update_stock_data(stock_code, JSON.parse(data));
       });
     }
+
     function get_ajax(url, success) {
 	    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	    xhr.open('GET', url);
@@ -39,8 +143,44 @@
 	    xhr.send();
 	    return xhr;
   }
+
+  // function is_up_to_date(stock_code) {
+  //   console.log(0);
+
+  //   // we get curr date str for the 1 run of every batch
+  //   // if (localStorage.getItem('curr_date_str') === null) {
+  //   //   return false;
+  //   // }
+
+  //   const data_str = localStorage.getItem(stock_code);
+
+  //   if (data_str === null) {
+  //     console.log(1);
+  //     return false; // if no such key exists in the local storage, it will return null.
+  //   }
+
+  //   if ( ! is_json_str(data_str) ) {
+  //     console.log(2);
+  //     return false;
+  //   }
+
+  //   const data_obj = JSON.parse(data_str);
+
+  //   if ( data_obj['Time Series (Daily)'] == undefined) {
+  //     console.log(3);
+  //     return false;
+  //   }
+
+  //   const time_series = data_obj['Time Series (Daily)'];
+
+  //   console.log(Object.keys(time_series)[0]);
+  //   console.log(curr_date_str);
+
+  //   return (Object.keys(time_series)[0] === curr_date_str);
+  // }
+
   function clean_data(data_obj) {
-    console.log(data_obj);
+    // console.log(data_obj);
     var result = [];
     var curr_obj;
     data_obj.forEach(curr_day_data_obj => {
@@ -54,7 +194,26 @@
   }
   function analyze_stock(stock_code, day_length) {
     const data_str = localStorage.getItem(stock_code);
+
+    if (data_str === null) {
+      console.log('stock code [' + stock_code + ']: The stock data is not in local storage yet.');
+      return;
+    }
+
+    if ( ! is_json_str(data_str) ) {
+      console.log('stock code [' + stock_code + ']: The stock data is not in local storage yet.');
+      return;
+    }
+
     const data_obj = JSON.parse(data_str);
+
+    if ( data_obj['Time Series (Daily)'] == undefined) {
+      console.log('stock code [' + stock_code + ']: The stock data is not in local storage yet.');
+      return;
+    }
+
+    // console.log(data_obj);
+
     //const time_series = data_obj['time_series']['Time Series (Daily)'];
     const time_series = data_obj['Time Series (Daily)'];
     const date_list = Object.keys(time_series);
@@ -78,7 +237,7 @@
 
     const stock_data = clean_data(raw_stock_data);
 
-    console.log(stock_data);
+    // console.log(stock_data);
 
     // get period low
     var period_low = stock_data[0]['low'];
@@ -122,9 +281,9 @@
     var period_start_date = stock_data[0]['date'];
     var period_start_date_index = 0;
 
-    console.log();
-    console.log(stock_data[0]);
-    console.log();
+    // console.log();
+    // console.log(stock_data[0]);
+    // console.log();
 
     const period_start_obj = {price: period_start, date: period_start_date, index: period_start_date_index};
     if (show_price_flag) {
