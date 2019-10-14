@@ -45,6 +45,24 @@
                 padding-top: 20px;
                 padding-bottom: 20px;
             }
+            .feature-list {
+                display: none;
+            }
+            @media (max-width: 500px) {
+                .feature-col {
+                    display: none;
+                }
+                .feature-comparison {
+                    display: none;
+                }
+                .feature-item {
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                }
+                .feature-list {
+                    display: block;
+                }
+            }
         </style>
     </head>
     <body>
@@ -91,61 +109,94 @@
             </div>
         </div>
         <div class="container rounded" id="prices">
-            <div class="row plans-row">
-                <div class="col">
-                    
+            <div class="feature-comparison">
+                <div class="row plans-row">
+                    <div class="col feature-col">                    
+                    </div>
+                    <div class="col">
+                        <h1>Starter</h1>
+                        <div class="each-price">Free</div>
+                        <button class="btn btn-primary">Sign Up</button>
+                    </div>
+                    <div class="col">
+                        <h1>Cozy</h1>
+                        <div class="each-price">$12.99</div>
+                        <button class="btn btn-primary">Sign Up</button>
+                    </div>
+                    <div class="col">
+                        <h1>Premium</h1>
+                        <div class="each-price">$49.99</div>
+                        <button class="btn btn-primary">Sign Up</button>
+                    </div>
                 </div>
-                <div class="col">
+                <div class="row feature-row">
+                    <div class="col">Feature #1</div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                </div>
+                <div class="row feature-row">
+                    <div class="col">Feature #2</div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                </div>
+                <div class="row feature-row">
+                    <div class="col">Feature #3</div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                </div>
+                <div class="row feature-row">
+                    <div class="col">Feature #4</div>
+                    <div class="col"></div>
+                    <div class="col">Yes</div>
+                    <div class="col">Yes</div>
+                </div>
+                <div class="row feature-row">
+                    <div class="col">Feature #5</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col">Yes</div>
+                </div>
+                <div class="row feature-row">
+                    <div class="col">Feature #6</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col">Yes</div>
+                </div>
+            </div>
+            <div class="feature-list">
+                <div>
                     <h1>Starter</h1>
                     <div class="each-price">Free</div>
                     <button class="btn btn-primary">Sign Up</button>
+                    <div class="feature-item">Feature #1</div>
+                    <div class="feature-item">Feature #2</div>
+                    <div class="feature-item">Feature #3</div>
                 </div>
-                <div class="col">
+                <hr>
+                <div>
                     <h1>Cozy</h1>
                     <div class="each-price">$12.99</div>
                     <button class="btn btn-primary">Sign Up</button>
+                    <div class="feature-item">Feature #1</div>
+                    <div class="feature-item">Feature #2</div>
+                    <div class="feature-item">Feature #3</div>
+                    <div class="feature-item">Feature #4</div>
                 </div>
-                <div class="col">
+                <hr>                
+                <div>
                     <h1>Premium</h1>
                     <div class="each-price">$49.99</div>
                     <button class="btn btn-primary">Sign Up</button>
+                    <div class="feature-item">Feature #1</div>
+                    <div class="feature-item">Feature #2</div>
+                    <div class="feature-item">Feature #3</div>
+                    <div class="feature-item">Feature #4</div>
+                    <div class="feature-item">Feature #5</div>
+                    <div class="feature-item">Feature #6</div>
                 </div>
-            </div>
-            <div class="row feature-row">
-                <div class="col">Feature #1</div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-            </div>
-            <div class="row feature-row">
-                <div class="col">Feature #2</div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-            </div>
-            <div class="row feature-row">
-                <div class="col">Feature #3</div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-            </div>
-            <div class="row feature-row">
-                <div class="col">Feature #4</div>
-                <div class="col"></div>
-                <div class="col">Yes</div>
-                <div class="col">Yes</div>
-            </div>
-            <div class="row feature-row">
-                <div class="col">Feature #5</div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col">Yes</div>
-            </div>
-            <div class="row feature-row">
-                <div class="col">Feature #6</div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col">Yes</div>
             </div>
         </div>
     </body>
