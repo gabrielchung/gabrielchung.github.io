@@ -34,6 +34,9 @@
             }
         </style>
         <script>
+            var saveData;
+            var data;
+
             function toggle_bold(elem) {
                 if (($(elem).css('font-weight') == 'bold') || ($(elem).css('font-weight') == 700)) {
                     $(elem).css('font-weight', 'normal');
@@ -76,6 +79,30 @@
             }
 
             $(document).ready(function(){
+                saveData = (function () {
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.style = "display: none";
+                    return function (data, fileName) {
+                            // var json = JSON.stringify($('html').html()),
+                            var html = $('html').clone();
+                            $(html).find('script').each(function(){
+                                if($(this).attr('src') == undefined) {
+                                    $(this).remove();
+                                }
+                            });
+                            var blob = new Blob([$(html).wrap('html').parent().html()], {type: "octet/stream"}),
+                                url = window.URL.createObjectURL(blob);
+                            a.href = url;
+                            a.download = fileName;
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        };
+                }());
+
+                data = { x: 42, s: "hello, world", d: new Date() },
+                fileName = "my-template.html";
+
                 $('.introduction-text-block').load('./components/introduction-text-block.html');
                 $('.introduction-image').load('./components/introduction-image.html');
                 $('.products').load('./components/products.html');
@@ -95,6 +122,25 @@
                 $('#applyBlueColorScheme').click(function(){
                     apply_blue();
                 });
+
+                $('#btnDownload').click(function(){
+                    // remove the template settings navbar
+                    var template_settings = $('#templateSettings').clone();
+                    $('#templateSettings').remove();
+
+                    // remove all the content removed by the user
+                    $('.my-container').each(function(){ 
+                        if ($(this).css('display') == 'none') {
+                            $(this).remove();
+                        }
+                    });
+
+                    saveData(data, fileName);
+                    
+                    //reload
+                    document.location = document.location;
+                    // $('body').append(template_settings);
+                });
             });
         </script>
     </head>
@@ -107,23 +153,6 @@
             
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="pricing.html">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="newsletter.html">Newsletter</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        About Us
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">History</a>
-                        <a class="dropdown-item" href="#">Corporate Responsibility</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Contact Us</a>
-                        </div>
-                    </li> -->
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search">
@@ -131,7 +160,7 @@
                 </form>
             </div>
         </nav>
-        <div class="container introduction-container">
+        <div class="container my-container introduction-container">
             <div class="row">
                 <div class="layout-row col-lg-6">
                     <div class="introduction-text-block">
@@ -143,7 +172,7 @@
                 </div>
             </div>
         </div>
-        <div class="container products-container">
+        <div class="container my-container products-container">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="layout-row col-8">
@@ -153,7 +182,7 @@
                 <div class="col-2"></div>
             </div>
         </div>
-        <div class="container services-container">
+        <div class="container my-container services-container">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="layout-row col-8">
@@ -163,7 +192,7 @@
                 <div class="col-2"></div>
             </div>
         </div>
-        <div class="container testimonials-container">
+        <div class="container my-container testimonials-container">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="layout-row col-8">
@@ -173,8 +202,8 @@
                 <div class="col-2"></div>
             </div>
         </div>
-        <div class="pricing pricing-container"></div>
-        <div class="container faq-container">
+        <div class="pricing my-container pricing-container"></div>
+        <div class="container my-container faq-container">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="layout-row col-8">
@@ -184,7 +213,7 @@
                 <div class="col-2"></div>
             </div>
         </div>
-        <div class="container newsletter-container">
+        <div class="container my-container newsletter-container">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="layout-row col-8">
@@ -194,7 +223,7 @@
                 <div class="col-2"></div>
             </div>
         </div>
-        <div class="container contact-form-container">
+        <div class="container my-container contact-form-container">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="layout-row col-8">
@@ -205,7 +234,7 @@
             </div>
         </div>
 
-        <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-primary">
+        <nav id="templateSettings" class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-primary">
             <a class="navbar-brand" href="">Template Settings</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#templateSettingsNavbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -248,6 +277,7 @@
                         </div>
                     </li>
                 </ul>
+                <button id="btnDownload" class="btn btn-outline-light my-2 my-sm-0">Download Current Template</button>
             </div>
         </nav>
     </body>
