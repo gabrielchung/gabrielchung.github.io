@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #console_mark { vertical-align: top; }
+        textarea { border: 0; }
+    </style>
+    <script>
+        function console_input_focus() {
+            document.getElementById('console_input').focus();
+        }
+        function onTestChange() {
+            var key = window.event.keyCode;
+
+            // If the user has pressed enter
+            if (key === 13) {
+                const console_input = document.getElementById('console_input').value;
+                const console_result = eval(console_input);
+                document.getElementById('result').innerHTML += '<div>&#62;&#62; '+console_input+'</div>';
+                document.getElementById('result').innerHTML += '<div>&#60;- '+console_result+'</div>';
+                document.getElementById('console_input_div').innerHTML = '<textarea id="console_input" onkeypress="onTestChange();"></textarea>'; 
+                console_input_focus();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        Result:
+        <div id="result"></div>
+    </div>
+    <div>
+        <span id="console_mark">&#62;&#62;</span> <span id="console_input_div"><textarea id="console_input" onkeypress="onTestChange();"></textarea></span>
+    </div>
+    <script>
+        console_input_focus();
+    </script>
+</body>
+</html>
