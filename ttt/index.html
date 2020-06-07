@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<style>
+    #board { font-size: 20px; }
+</style>
+<script type="text/javascript" src="brython.js"></script>
+<script type="text/javascript" src="brython_stdlib.js"></script>
+<!-- <script type="text/python" src="002_python_script.py" defer></script> -->
+<script type="text/python" src="ttt.py" defer></script>
+<script type="text/python" src="ttt_for_frontend.py" defer></script>
+<script type="text/python" defer>
+    import ttt_for_frontend as ttt_fe
+    ttt_fe.main()
+</script>
+</head>
+
+<body onload="brython(1)">
+    <h1>Tic Tac Toe</h1>
+    Player 1: O<br />
+    Player 2: X<br />
+    <pre>
+    <div id="board"></div>
+    </pre>
+</body>
+
+</html>
