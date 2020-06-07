@@ -4,6 +4,7 @@ from browser import alert
 import json
 import ttt
 import copy
+from browser import timer
 
 def new_div():
     div = document.createElement('div')
@@ -16,7 +17,7 @@ def new_span(text):
 
 def check_won(won, player_index):
     if won:
-        alert(f'Player {str(player_index+1)} has won!')
+        timer.set_timeout(lambda : alert(f'Player {str(player_index+1)} has won!'), 1000)
 
 def take_move(event):
     global t
