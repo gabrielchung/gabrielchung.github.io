@@ -14,18 +14,20 @@ def new_span(text):
     span.textContent = text
     return span
 
+def check_won(won, player_index):
+    if won:
+        alert(f'Player {str(player_index+1)} has won!')
+
 def take_move(event):
     global t
     global board_size
-    console.log(event.target['data-x'])
-    console.log(event.target['data-y'])
+    # console.log(event.target['data-x'])
+    # console.log(event.target['data-y'])
     player_index = t.whose_turn()
     won = t.take(int(event.target['data-x']), int(event.target['data-y']))
     console.log(t.get_board())
     clear_board()
-    display_board(t, board_size)
-    if won:
-        alert(f'Player {str(player_index+1)} has won!')
+    display_board(t, board_size, check_won, (won, player_index))
 
 def new_empty_cell(x, y):
     a = document.createElement('a')
@@ -48,10 +50,10 @@ def clear_board():
     while b.firstChild:
         b.firstChild.remove()
 
-def display_board(ttt_obj, board_size):
-    board_as_html(document['board'], ttt_obj.get_board(), board_size)
+def display_board(ttt_obj, board_size, callback, args):
+    board_as_html(document['board'], ttt_obj.get_board(), board_size, callback, args)
 
-def board_as_html(dom_board, ttt_board, board_size):
+def board_as_html(dom_board, ttt_board, board_size, callback, args):
     # first row for coordinates
     span = document.createElement('span')
     span.textContent = '  ' + ' '.join([str(i) for i in range(board_size)])
@@ -83,6 +85,9 @@ def board_as_html(dom_board, ttt_board, board_size):
         # line_break = document.createElement('br')
         # dom_board.appendChild(line_break)
 
+    if callback != None:
+        callback(*args)
+
 # def board_as_html(dom_board, ttt_board, board_size):
 #     # first row for coordinates
 #     span = document.createElement('span')
@@ -105,4 +110,4 @@ def main():
     global t
     t = ttt.TTT(board_size)
     console.log(t.get_board())
-    display_board(t, board_size)
+    display_board(t, board_size, None, None)
