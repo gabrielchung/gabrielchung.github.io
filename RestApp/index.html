@@ -53,7 +53,8 @@
 <script>
     if (navigator.userAgent.indexOf('iPhone') > -1) {
         // add padding for iPhone to scoll
-        document.querySelector('#mainDiv').style.marginBottom = (window.innerHeight + 50) + 'px';
+        document.querySelector('#mainDiv').style.marginBottom = (window.innerHeight + 150) + 'px';
+        window.scrollTo(0, 150);
     }
     if(window.innerHeight > window.innerWidth){
         // Portrait
