@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rest App - Landscape</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            /* background-image: url('landscape.jpg'); */
+            background-size: cover;
+        }
+    </style>
+    <script>
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+</body>
+<script>
+    if(window.innerHeight > window.innerWidth){
+        // Portrait
+        document.body.style.backgroundImage = "url('portrait.jpg')";
+    } else {
+        // Landscape
+        document.body.style.backgroundImage = "url('landscape.jpg')";
+    }
+    window.onclick = () => {
+        toggleFullScreen();
+    }
+</script>
+</html>
