@@ -51,7 +51,10 @@
     <div id="mainDiv"></div>
 </body>
 <script>
-    document.querySelector('#mainDiv').style.marginBottom = (window.innerHeight + 50) + 'px';
+    if (navigator.userAgent.indexOf('iPhone') > -1) {
+        // add padding for iPhone to scoll
+        document.querySelector('#mainDiv').style.marginBottom = (window.innerHeight + 50) + 'px';
+    }
     if(window.innerHeight > window.innerWidth){
         // Portrait
         document.body.style.backgroundImage = "url('portrait.jpg')";
