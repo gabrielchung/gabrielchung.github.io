@@ -13,22 +13,45 @@
             /* background-image: url('landscape.jpg'); */
             background-size: cover;
         }
+        #mainDiv {
+            display: block;
+            background-color: yellow;
+        }
     </style>
     <script>
+        function openFullscreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        }
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+        }
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
+                openFullscreen();
             } else {
-                if (document.exitFullscreen) {
-                document.exitFullscreen();
-                }
+                exitFullscreen();
             }
         }
     </script>
 </head>
 <body>
+    <div id="mainDiv"></div>
 </body>
 <script>
+    document.querySelector('#mainDiv').style.marginBottom = (window.innerHeight + 50) + 'px';
     if(window.innerHeight > window.innerWidth){
         // Portrait
         document.body.style.backgroundImage = "url('portrait.jpg')";
