@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <!-- Include the Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Beans Cafe</title>
+    <style id="my-css-style">
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary-color: #606c38;
+            --secondary-color: #9b400c;
+            --neutral-color: #ede0d4;
+            --border-color: #d1d5db;
+            --button-color: #9b400c;
+        }
+
+        .primary-color {
+            color: var(--primary-color);
+        }
+
+        .primary-bg {
+            background-color: var(--primary-color);
+        }
+
+        .secondary-color {
+            color: var(--secondary-color);
+        }
+
+        .secondary-bg {
+            background-color: var(--secondary-color);
+        }
+
+        .neutral-color {
+            color: var(--neutral-color);
+        }
+
+        .neutral-bg {
+            background-color: var(--neutral-color);
+        }
+
+        .section-style-one {
+            color: var(--primary-color);
+            background-color: var(--neutral-color);
+        }
+
+        .section-style-two {
+            color: var(--neutral-color);
+            background-color: var(--primary-color);
+        }
+
+        .border-color {
+            border-color: var(--border-color);
+        }
+
+        .button-bg {
+            background-color: var(--button-color);
+        }
+        
+        .button-hover:hover {
+            background-color: var(--neutral-color);
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
+        .pointer-events-none {
+            pointer-events: none;
+        }
+
+        nav #home-link {
+            white-space: nowrap;
+            margin-right: 25px;
+        }
+
+        /* Updated Slider Styles */
+        #slider {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Full height of the viewport */
+            overflow: hidden;
+        }
+
+        #sliderWrapper {
+            display: flex;
+            transition: transform 0.5s;
+        }
+
+        #sliderWrapper .slide {
+            flex: 0 0 100%;
+            height: 100vh; 
+        }
+
+        #sliderWrapper img {
+            width: 100%;
+            height: 100vh; /* Full height of the viewport */
+            object-fit: cover;
+        }
+
+        #sliderWrapper .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: white;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #sliderWrapper .slide-content .subtext {
+            display: block;
+            font-size: 1rem; /* Smaller font for the subtext */
+            margin-top: 10px; /* Spacing between the title and subtext */
+        }
+
+        #sliderWrapper .slide-content a {
+            background-color: var(--primary-color);
+            transition: background-color 0.3s ease;
+            font-size: 1.6rem;
+        }
+
+        #sliderWrapper .slide-content a:hover {
+            background-color: var(--neutral-color);
+        }
+        
+        .info-img img {
+            width: 100%;  /* makes the image fit the container's width */
+            height: auto; /* keeps the image's aspect ratio */
+            display: block; /* removes any space below the image */
+        }
+
+        .font-handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body class="neutral-bg">
+    <!-- Navigation -->
+    <nav class="p-6 secondary-bg flex justify-between items-center fixed top-0 w-full z-50">
+        <a id="home-link" href="#slider" class="text-xl font-bold neutral-color">Coffee Beans Cafe</a>
+        <div class="space-x-4">
+            <a href="#about" class="neutral-color">About Us</a>
+            <a href="#menu" class="neutral-color">Menu</a>
+            <a href="#booking" class="neutral-color">Book a Table</a>
+            <a href="#contact" class="neutral-color">Contact Us</a>
+        </div>
+    </nav>
+    
+    <section id="slider" class="relative w-full mt-16">
+        <div class="absolute w-full h-full flex" id="sliderWrapper">
+            <!-- First Slide -->
+            <div class="slide relative w-full">
+                <img src="coffee_shop_1.jpg" alt="Coffee Shop Image 1">
+                <div class="slide-content">
+                    Discover the Best Coffee in Town
+                    <span class="subtext">Experience the richness & aroma</span>
+                    <!-- Action Buttons -->
+                    <div class="mt-6">
+                        <a href="#contact" class="inline-block mr-4 py-2 px-6 rounded-lg button-bg text-white hover:bg-opacity-80 transition duration-300">Visit Our Shop</a>
+                        <a href="#booking" class="inline-block py-2 px-6 rounded-lg button-bg text-white hover:bg-opacity-80 transition duration-300">Book a Table</a>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="info-area relative py-32 section-style-one">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full md:w-1/2 md:pr-16 md:pl-16">
+                    <div class="info-img transition-transform transform">
+                        <img class="w-full" src="deco_left.jpg" alt="info-img">
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 pl-8 md:pl-16 md:pr-16">
+                    <div class="info-content transition-transform transform">
+                        <div class="info-header pb-6">
+                            <h2 class="text-2xl font-bold mt-2">Welcome to Coffee Beans Cafe</h2>
+                        </div>
+                        <p class="mt-4">In the heart of our café lies a passion for rich flavors and aromatic experiences. We travel the world, selecting the most premium coffee beans to ensure that each sip you take is nothing short of a sensory journey.</p>
+                        <p class="mt-4">Every cup we serve is an art; a perfect blend where aroma meets taste, delivering a coffee experience that truly awakens the soul.</p>
+                        <div class="info-footer mt-8 flex justify-between items-center">
+                            <div class="author-signature">
+                                <!-- Removed Image and added Text Signature with Font Style -->
+                                <p class="text-2xl font-handwriting mt-2">Alexa Doe</p> 
+                            </div>
+                            <div class="learn-more-btn">
+                                <a href="info.html" class="px-4 py-2 button-bg text-white rounded transition-colors">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Home Section -->
+    <!-- <section id="home" class="pt-64 pb-20 px-6 primary-bg neutral-color text-center">
+        <div class="max-w-xl mx-auto text-justify">
+            <h1 class="text-4xl">Welcome to Coffee Beans Cafe</h1>
+            <p class="mt-4 text-lg">Serving the best coffee in town.</p>
+        </div>
+    </section> -->
+
+    <!-- About Section -->
+    <!--
+    <section id="about" class="py-40 px-6 primary-bg neutral-color text-center">
+        <div class="max-w-xl mx-auto text-justify">
+            <h2 class="text-2xl">About Us</h2>
+            <p class="mt-4">Coffee Beans Cafe is a cozy and unique coffee shop located in the heart of the city. We provide high-quality coffee and delicious pastries in a warm and inviting environment. Our goal is to make your coffee experience unforgettable.</p>
+        </div>
+    </section>
+    -->
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-40 px-6 section-style-two">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl mb-28 text-center">Our Menu</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">    
+                <!-- Card 1 -->
+                <div class="neutral-bg secondary-color p-4 rounded shadow-lg">
+                    <img src="coffee_cup_01.jpg" alt="Espresso" class="w-full rounded">
+                    <h3 class="text-xl font-bold mt-4">Espresso</h3>
+                    <p>Pure, intense coffee flavor.</p>
+                    <p class="font-bold mt-2">$3.00</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="neutral-bg secondary-color p-4 rounded shadow-lg">
+                    <img src="coffee_cup_02.jpg" alt="Americano" class="w-full rounded">
+                    <h3 class="text-xl font-bold mt-4">Americano</h3>
+                    <p>Espresso elegantly blended with hot water.</p>
+                    <p class="font-bold mt-2">$3.50</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="neutral-bg secondary-color p-4 rounded shadow-lg">
+                    <img src="coffee_cup_01.jpg" alt="Latte" class="w-full rounded">
+                    <h3 class="text-xl font-bold mt-4">Latte</h3>
+                    <p>Espresso with velvety steamed milk and foam.</p>
+                    <p class="font-bold mt-2">$4.00</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="neutral-bg secondary-color p-4 rounded shadow-lg">
+                    <img src="coffee_cup_02.jpg" alt="Cappuccino" class="w-full rounded">
+                    <h3 class="text-xl font-bold mt-4">Cappuccino</h3>
+                    <p>Mix of espresso, milk, and froth.</p>
+                    <p class="font-bold mt-2">$4.50</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-40 px-6 section-style-one text-center">
+        <div class="max-w-xl mx-auto text-justify">
+            <h2 class="text-2xl">Book a Table</h2>
+            <p class="mt-4">Want to secure a spot? Book your table now. Note: This is just a mock booking form for demonstration purposes.</p>
+            <form class="mt-8 space-y-3">
+                <input type="text" placeholder="Your Name" class="block w-full p-2 rounded border border-color">
+                <input type="email" placeholder="Your Email" class="block w-full p-2 rounded border border-color">
+                <input type="date" placeholder="Date" class="block w-full p-2 rounded border border-color">
+                <!-- Time Dropdown -->
+                <div class="relative">
+                    <select class="block w-full p-2 rounded border border-color appearance-none bg-white" aria-label="Time">
+                        <option value="" disabled selected>Select Time</option>
+                        <option value="09:00">9:00 am</option>
+                        <option value="09:30">9:30 am</option>
+                        <option value="10:00">10:00 am</option>
+                        <option value="10:30">10:30 am</option>
+                        <option value="11:00">11:00 am</option>
+                        <option value="11:30">11:30 am</option>
+                        <option value="12:00">12:00 pm</option>
+                        <option value="12:30">12:30 pm</option>
+                        <option value="13:00">1:00 pm</option>
+                        <option value="13:30">1:30 pm</option>
+                        <option value="14:00">2:00 pm</option>
+                        <option value="14:30">2:30 pm</option>
+                        <option value="15:00">3:00 pm</option>
+                        <option value="15:30">3:30 pm</option>
+                        <option value="16:00">4:00 pm</option>
+                        <option value="16:30">4:30 pm</option>
+                        <option value="17:00">5:00 pm</option>
+                        <option value="17:30">5:30 pm</option>
+                        <option value="18:00">6:00 pm</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                    </div>
+                </div>
+                <div class="relative">
+                    <select class="block w-full p-2 rounded border border-color appearance-none bg-white" aria-label="Number of People">
+                        <option value="" disabled selected>Number of People</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                    </div>
+                </div>
+                <button class="block w-full p-2 rounded button-bg neutral-color">Book Now</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-40 px-6 section-style-two text-center">
+        <div class="max-w-xl mx-auto text-justify">
+            <h2 class="text-2xl">Contact Us</h2>
+            <p class="mt-4">Got a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            <address class="mt-6">
+                <p>123 Coffee Beans St., Coffeeville, Coffee Country</p>
+                <p><a href="tel:0123456789">0123 456 789</a></p>
+                <p><a href="mailto:hello@coffeebeanscafe.com">hello@coffeebeanscafe.com</a></p>
+            </address>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="p-6 secondary-bg text-center neutral-color">
+        © 2023 Coffee Beans Cafe
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = document.querySelectorAll('#sliderWrapper .slide').length;
+
+        function moveRight() {
+            currentSlide++;
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            }
+            updateSliderPosition();
+        }
+
+        function moveLeft() {
+            currentSlide--;
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+            updateSliderPosition();
+        }
+
+        function updateSliderPosition() {
+            const sliderWrapper = document.getElementById('sliderWrapper');
+            const newTransformPosition = -(currentSlide * 100);  // Multiply the slide index with 100
+            sliderWrapper.style.transform = `translateX(${newTransformPosition}%)`;
+        }
+
+        // Event listeners for the buttons
+        document.getElementById('prevSlide').addEventListener('click', moveLeft);
+        document.getElementById('nextSlide').addEventListener('click', moveRight);
+    </script>
+
+</body>
+
+</html>
