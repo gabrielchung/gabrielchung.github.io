@@ -149,17 +149,60 @@
 </head>
 
 <body class="neutral-bg">
+
     <!-- Navigation -->
-    <nav class="p-6 secondary-bg flex justify-between items-center fixed top-0 w-full z-50">
+    <nav class="p-7 secondary-bg neutral-color flex justify-between items-center fixed top-0 w-full z-50">
         <a id="home-link" href="#slider" class="text-xl font-bold neutral-color">Coffee Beans Cafe</a>
-        <div class="space-x-4">
-            <a href="#about" class="neutral-color">About Us</a>
-            <a href="#menu" class="neutral-color">Menu</a>
-            <a href="#booking" class="neutral-color">Book a Table</a>
-            <a href="#contact" class="neutral-color">Contact Us</a>
+    
+        <div id="menu-toggle" class="sm:hidden block">
+            <button class="p-0 pt-1 focus:outline-none focus:bg-gray-300">
+                <svg class="h-5 w-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <title>Menu</title>
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+                </svg>
+            </button>
+        </div>
+    
+        <div id="menu-links" class="space-x-4 sm:block hidden">
+            <a href="#about">About Us</a>
+            <a href="#menu">Menu</a>
+            <a href="#booking">Book a Table</a>
+            <a href="#contact">Contact Us</a>
         </div>
     </nav>
     
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuLinks = document.getElementById('menu-links');
+        let clonedMenu;
+
+        menuToggle.addEventListener('click', function () {
+
+            if (clonedMenu) {
+                clonedMenu.classList.toggle('hidden');
+                if (! menuLinks.classList.contains('hidden')) {
+                    menuLinks.classList.toggle('hidden');
+                }
+            } else {
+                // Clone the menu links
+                clonedMenu = menuLinks.cloneNode(true);
+                clonedMenu.id = 'cloned-menu-links';
+                clonedMenu.classList.add('secondary-bg', 'neutral-color', 'sm:hidden', 'block', 'fixed', 'top-20', 'w-full', 'p-4', 'flex', 'flex-col', 'space-y-2', 'z-50');
+                
+                // Insert cloned menu after the navbar
+                document.body.insertBefore(clonedMenu, document.body.firstChild);
+
+                if (clonedMenu.classList.contains('hidden')) {
+                    clonedMenu.classList.toggle('hidden');
+                }
+            }
+        });
+    });
+    </script>
+    
+
     <section id="slider" class="relative w-full mt-16">
         <div class="absolute w-full h-full flex" id="sliderWrapper">
             <!-- First Slide -->
@@ -181,12 +224,12 @@
     <section id="about" class="info-area relative py-32 section-style-one">
         <div class="container mx-auto">
             <div class="flex flex-wrap items-center">
-                <div class="w-full md:w-1/2 md:pr-16 md:pl-16">
+                <div class="w-full md:w-1/2 md:px-16 md:mb-0 mb-24">
                     <div class="info-img transition-transform transform">
                         <img class="w-full" src="deco_left.jpg" alt="info-img">
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 pl-8 md:pl-16 md:pr-16">
+                <div class="w-full lg:pl-8 md:w-1/2 md:px-16 md:mx-0 mx-5">
                     <div class="info-content transition-transform transform">
                         <div class="info-header pb-6">
                             <h2 class="text-2xl font-bold mt-2">Welcome to Coffee Beans Cafe</h2>
@@ -336,34 +379,34 @@
     </footer>
 
     <script>
-        let currentSlide = 0;
-        const totalSlides = document.querySelectorAll('#sliderWrapper .slide').length;
+        // let currentSlide = 0;
+        // const totalSlides = document.querySelectorAll('#sliderWrapper .slide').length;
 
-        function moveRight() {
-            currentSlide++;
-            if (currentSlide >= totalSlides) {
-                currentSlide = 0;
-            }
-            updateSliderPosition();
-        }
+        // function moveRight() {
+        //     currentSlide++;
+        //     if (currentSlide >= totalSlides) {
+        //         currentSlide = 0;
+        //     }
+        //     updateSliderPosition();
+        // }
 
-        function moveLeft() {
-            currentSlide--;
-            if (currentSlide < 0) {
-                currentSlide = totalSlides - 1;
-            }
-            updateSliderPosition();
-        }
+        // function moveLeft() {
+        //     currentSlide--;
+        //     if (currentSlide < 0) {
+        //         currentSlide = totalSlides - 1;
+        //     }
+        //     updateSliderPosition();
+        // }
 
-        function updateSliderPosition() {
-            const sliderWrapper = document.getElementById('sliderWrapper');
-            const newTransformPosition = -(currentSlide * 100);  // Multiply the slide index with 100
-            sliderWrapper.style.transform = `translateX(${newTransformPosition}%)`;
-        }
+        // function updateSliderPosition() {
+        //     const sliderWrapper = document.getElementById('sliderWrapper');
+        //     const newTransformPosition = -(currentSlide * 100);  // Multiply the slide index with 100
+        //     sliderWrapper.style.transform = `translateX(${newTransformPosition}%)`;
+        // }
 
-        // Event listeners for the buttons
-        document.getElementById('prevSlide').addEventListener('click', moveLeft);
-        document.getElementById('nextSlide').addEventListener('click', moveRight);
+        // // Event listeners for the buttons
+        // document.getElementById('prevSlide').addEventListener('click', moveLeft);
+        // document.getElementById('nextSlide').addEventListener('click', moveRight);
     </script>
 
 </body>
