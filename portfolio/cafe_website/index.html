@@ -144,6 +144,23 @@
         .font-handwriting {
             font-family: 'Dancing Script', cursive;
         }
+
+        input[type="date"]::-webkit-inner-spin-button,
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        input[type="date"]::-webkit-clear-button {
+            display: none;
+        }
+
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            border: 1px solid #ccc;
+            text-align: left;
+        }   
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
@@ -307,14 +324,14 @@
     </section>
 
     <!-- Booking Section -->
-    <section id="booking" class="py-40 px-6 section-style-one text-center">
-        <div class="max-w-xl mx-auto text-justify">
+    <section id="booking" class="py-40 px-6 section-style-one text-left">
+        <div class="max-w-xl mx-auto">
             <h2 class="text-2xl">Book a Table</h2>
             <p class="mt-4">Looking forward to an exceptional dining experience? Don't miss out your spot by booking your table with us today.</p>
             <form class="mt-8 space-y-3">
                 <input type="text" placeholder="Your Name" class="block w-full p-2 rounded border border-color">
                 <input type="email" placeholder="Your Email" class="block w-full p-2 rounded border border-color">
-                <input type="date" placeholder="Date" class="block w-full p-2 rounded border border-color">
+                <input id="date-input" type="date" placeholder="Date" class="block w-full p-2 rounded border border-color">
                 <!-- Time Dropdown -->
                 <div class="relative">
                     <select class="block w-full p-2 rounded border border-color appearance-none bg-white" aria-label="Time">
@@ -381,7 +398,7 @@
     <script>
 
         // Set the value of the date input control to be today
-        document.getElementById('dateInput').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('date-input').value = new Date().toISOString().slice(0, 10);
 
         // let currentSlide = 0;
         // const totalSlides = document.querySelectorAll('#sliderWrapper .slide').length;
