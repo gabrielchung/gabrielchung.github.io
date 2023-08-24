@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include the Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Special - Coffee Beans Cafe</title>
+    <style id="my-css-style">
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary-color: #606c38;
+            --secondary-color: #9b400c;
+            --neutral-color: #ede0d4;
+            --border-color: #d1d5db;
+            --button-color: #9b400c;
+        }
+
+        .primary-color {
+            color: var(--primary-color);
+        }
+
+        .primary-bg {
+            background-color: var(--primary-color);
+        }
+
+        .secondary-color {
+            color: var(--secondary-color);
+        }
+
+        .secondary-bg {
+            background-color: var(--secondary-color);
+        }
+
+        .neutral-color {
+            color: var(--neutral-color);
+        }
+
+        .neutral-bg {
+            background-color: var(--neutral-color);
+        }
+
+        .section-style-one {
+            color: var(--primary-color);
+            background-color: var(--neutral-color);
+        }
+
+        .section-style-two {
+            color: var(--neutral-color);
+            background-color: var(--primary-color);
+        }
+
+        .border-color {
+            border-color: var(--border-color);
+        }
+    </style>
+</head>
+
+<body>
+<!-- Today's Special Section -->
+<section id="todays-special" class="primary-bg py-40 px-6 flex items-center justify-center min-h-screen">
+    <div class="max-w-md mx-auto">
+        <h2 class="text-5xl mb-28 text-center neutral-color">Today's Special</h2>
+        <!-- Special Card -->
+        <div class="neutral-bg secondary-color p-4 rounded shadow-lg">
+            <img src="coffee_cup_01.jpg" alt="Mocha Latte" class="w-full rounded">
+            <h3 class="text-xl font-bold mt-4">Mocha Latte</h3>
+            <p>A perfect blend of espresso, velvety steamed milk, chocolate syrup, and topped with whipped cream.</p>
+            <p class="mt-4 text-right">
+                <span class="font-bold text-lg line-through opacity-70">$5.50</span>
+                <span class="font-bold text-xl ml-2">$4.50</span>
+            </p>
+
+            <!-- Call to Action Button -->
+            <a href="https://gabrielchung.github.io/portfolio/cafe_website/index.html" 
+                class="mt-4 block w-full text-center py-2 px-4 rounded secondary-bg neutral-color">
+                Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<footer class="p-6 secondary-bg text-center neutral-color">
+ © 2023 Coffee Beans Cafe
+</footer>
+
+</body>
+
+</html>
