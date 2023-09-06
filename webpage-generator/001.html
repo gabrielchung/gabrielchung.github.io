@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Input Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="template.js" type="text/JavaScript"></script>
+    <script src="svg_logo.js" type="text/JavaScript"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Create Your Own Webpage</h2>
+        <div class="mt-5">
+            <form id="dataForm">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" value="Happy Florist" placeholder="Enter the title">
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="primary_color" class="form-label">Primary Color</label>
+                        <input type="color" class="form-control form-control-color" id="primary_color" value="#333333">
+                    </div>
+                    <div class="col mb-3">
+                        <label for="secondary_color" class="form-label">Secondary Color</label>
+                        <input type="color" class="form-control form-control-color" id="secondary_color" value="#ffffff">
+                    </div>
+                    <div class="col mb-3">
+                        <label for="button_bg_color" class="form-label">Button Background Color</label>
+                        <input type="color" class="form-control form-control-color" id="button_bg_color" value="#ffafcc">
+                    </div>
+                    <div class="col mb-3">
+                        <label for="button_text_color" class="form-label">Button Text Color</label>
+                        <input type="color" class="form-control form-control-color" id="button_text_color" value="#ffffff">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="svg_logo" class="form-label">SVG Logo (HTML Code)</label>
+                    <textarea class="form-control" id="svg_logo" placeholder="Insert SVG HTML here"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="menu_links" class="form-label">Menu Links Titles</label>
+                    <textarea class="form-control" id="menu_links" placeholder="Enter each menu link on a new line. For example:Home,About,Contact"></textarea>
+                    <small class="form-text text-muted">Enter each menu link title on a new line.</small>
+                </div>
+                <div class="mb-3">
+                    <label for="image_src" class="form-label">Image Source</label>
+                    <input type="text" class="form-control" id="image_src" value="https://gabrielchung.github.io/images/flowers.jpg" placeholder="Enter the path to the image">
+                </div>
+                <div class="mb-3">
+                    <label for="main_text_title" class="form-label">Main Text Title</label>
+                    <input type="text" class="form-control" id="main_text_title" value="Spend $30, Ship Free!" placeholder="Enter main text title">
+                </div>
+                <div class="mb-3">
+                    <label for="button_text" class="form-label">Button Text</label>
+                    <input type="text" class="form-control" id="button_text" value="Explore more" placeholder="Enter button text">
+                </div>
+                <div class="mb-3">
+                    <label for="copyright_year" class="form-label">Copyright Year</label>
+                    <input type="number" class="form-control" id="copyright_year" value="2023" placeholder="Enter copyright year">
+                </div>
+                <div class="mb-3">
+                    <label for="brand" class="form-label">Brand Name</label>
+                    <input type="text" class="form-control" id="brand" value="Happy Florist Company" placeholder="Enter brand name">
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Generate HTML</button>
+            </form>
+        <div class="mt-2">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script>
+
+        //
+
+        function generatePage(data) {
+
+            for (let key in data) {
+                const regex = new RegExp(`{{ ${key} }}`, 'g');
+                template = template.replace(regex, data[key]);
+            }
+
+            return template;
+        }
+
+        function renderInNewTab(htmlContent) {
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        }
+
+        function generateMenu(user_input) {
+            // Get the content of the textarea
+            const content = user_input.trim();
+
+            // Split the content by newline to get individual menu items
+            const items = content.split(',');
+
+            // Generate the links based on the items array
+            let linksHTML = '';
+            for(let i = 0; i < items.length; i++) {
+                if (i === 0) { // If it's the first item
+                    linksHTML += `<a href="#" class="mt-2 ml-12 lg:m-0 lg:ml-12">${items[i]}</a>`;
+                } else {
+                    linksHTML += `<a href="#">${items[i]}</a>`;
+                }
+            }
+
+            // Return the generated links HTML
+            return linksHTML;
+        }
+
+        function assignDefaultValues(data) {
+            data.svg_logo = svg_logo;
+            console.log(data.menu_links);
+            if (data.menu_links === '') {
+                data.menu_links = 'Home,Products,Testimonials,FAQ,About,Contact';
+            }
+            return data;
+        }
+
+
+        //
+
+
+        // JavaScript code to handle the form submission 
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Extract data from form
+            let data = {
+                title: document.getElementById('title').value,
+                primary_color: document.getElementById('primary_color').value,
+                secondary_color: document.getElementById('secondary_color').value,
+                button_text_color: document.getElementById('button_text_color').value,
+                button_bg_color: document.getElementById('button_bg_color').value,
+                svg_logo: document.getElementById('svg_logo').value,
+                menu_links: document.getElementById('menu_links').value,
+                image_src: document.getElementById('image_src').value,
+                main_text_title: document.getElementById('main_text_title').value,
+                button_text: document.getElementById('button_text').value,
+                copyright_year: document.getElementById('copyright_year').value,
+                brand: document.getElementById('brand').value
+            };
+
+
+            data = assignDefaultValues(data);
+            data.menu_links = generateMenu(data.menu_links);
+            
+            // Use the data to generate your page (using the generatePage function from before)
+            const generatedHTML = generatePage(data);
+            console.log(generatedHTML); // or render it somewhere
+            renderInNewTab(generatedHTML);
+        });
+    </script>
+</body>
+</html>
