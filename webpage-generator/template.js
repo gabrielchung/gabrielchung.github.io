@@ -109,7 +109,7 @@ let template = `<!DOCTYPE html>
 <body class="secondary-bg">
 
     <div class="text-center secondary-bg"> 
-        <nav class="inline-block px-4 py-4 secondary-bg primary-color inline-flex justify-between lg:justify-normal top-0 z-50 w-full lg:w-auto">
+        <nav class="inline-flex flex-wrap px-4 py-4 secondary-bg primary-color justify-between lg:justify-normal top-0 z-50 w-full lg:w-auto">
             <a id="home-link" href="#" class="pl-8 text-xl font-bold primary-color">
                 <div id="logo-container">
                     {{ svg_logo }}
@@ -175,10 +175,9 @@ let template = `<!DOCTYPE html>
                     // Clone the menu links
                     clonedMenu = menuLinks.cloneNode(true);
                     clonedMenu.id = 'cloned-menu-links';
-                    clonedMenu.classList.add('secondary-bg', 'primary-color', 'lg:hidden', 'block', 'fixed', 'top-20', 'w-full', 'p-4', 'flex', 'flex-col', 'z-50');
+                    clonedMenu.classList.add('secondary-bg', 'primary-color', 'lg:hidden', 'block', 'text-left', 'w-full', 'p-4', 'flex', 'flex-col', 'z-50');
                     
-                    // Insert cloned menu after the navbar
-                    document.body.insertBefore(clonedMenu, document.body.firstChild);
+                    menuLinks.parentNode.appendChild(clonedMenu);
     
                     if (clonedMenu.classList.contains('hidden')) {
                         clonedMenu.classList.toggle('hidden');
