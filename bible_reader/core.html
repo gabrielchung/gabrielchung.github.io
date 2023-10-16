@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            font-size: 24px;  /* Increase the default font size */
+            line-height: 1.5;  /* Increase line spacing for better readability */
+        }
+
+        #app {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 30px;  /* Increased padding */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            font-weight: bold;  /* Make headings bolder */
+            margin-bottom: 20px;  /* Add some spacing after headings */
+        }
+
+        #tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;  /* Increased margin for better spacing */
+        }
+
+        .tab {
+            padding: 20px 30px;  /* Increased padding for a more clickable area */
+            border: 1px solid #ddd;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            margin: 10px;  /* Increased margin for better spacing */
+            border-radius: 5px;
+            flex: 1;
+            font-weight: 500;  /* Make tab text a bit bolder */
+        }
+
+        .tab.active {
+            background-color: #eee;
+        }
+
+        #pluginViewDiv {
+            margin-top: 30px;  /* Increased margin for better spacing */
+        }
+
+        button, select {
+            padding: 15px 25px;  /* Increased padding for better tap target */
+            margin: 0 10px;  /* Increased space between buttons */
+            cursor: pointer;
+            font-size: 18px;  /* Match the default font size */
+        }
+
+        select {
+            vertical-align: middle;  /* Align with the middle of adjacent text/buttons */
+        }
+
+        @media (max-width: 600px) {
+            body{
+                font-size: 18px;
+            }
+            #app {
+                width: 95%;
+                padding-left: 2.5%;  /* Adjust padding for smaller screens */
+                padding-right: 2.5%;
+            }
+            .tab {
+                flex: 0 0 45%;
+            }
+        }
+
+        button:focus {
+            outline: none; /* Remove the default focus outline */
+        }
+
+        /* Specific styling for the focus mode buttons */
+        #pluginViewDiv > button {
+            display: block;
+            margin: 20px auto; /* Centers the button */
+            background-color: #eee;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>My App</h1>
+        <h3>Plugins:</h3>
+        <div id="tabs">
+            <!-- Tabs will be populated here -->
+        </div>
+        <div id="pluginViewDiv">
+            <!-- Plugins will render content here -->
+        </div>
+    </div>
+
+    <script>
+        
+        const pluginViewDiv = document.getElementById('pluginViewDiv');
+        const tabsContainer = document.getElementById('tabs');
+
+        const PluginManager = {
+            plugins: {},
+            data: {},  // Stores data for the plugins
+
+            hasQueryParam(name) {
+                const params = new URLSearchParams(window.location.search);
+                return params.has(name);
+            },
+
+            register(plugin, options = {}) {
+                const isVisible = options.visible !== undefined ? options.visible : true;
+
+                this.plugins[plugin.name] = plugin;
+                plugin.init();
+
+                // Just skip adding the plugin to the tab because this plugin may still be used by other plugins.
+                if (!isVisible && ! this.hasQueryParam('debug')) {
+                    return; // If the plugin is set to invisible and the debug query parameter isn't present, don't register it
+                }
+
+                this.addTab(plugin);
+            },
+
+            render(pluginName) {
+                pluginViewDiv.innerHTML = '';
+                Array.from(tabsContainer.children).forEach(tab => tab.classList.remove('active'));
+                const activeTab = document.getElementById(`tab-${pluginName}`);
+                activeTab.classList.add('active');
+
+                // Logging the use of the plugin
+                MessagesPlugin.log(`Plugin ${pluginName} used at ${new Date().toLocaleString()}.`);
+
+                this.plugins[pluginName].render(pluginViewDiv);
+            },
+
+            addTab(plugin) {
+                const tab = document.createElement('div');
+                tab.classList.add('tab');
+                tab.innerText = plugin.tabName || plugin.name;
+                tab.id = `tab-${plugin.name}`;
+                tab.addEventListener('click', () => this.render(plugin.name));
+                tabsContainer.appendChild(tab);
+            }
+        };
+
+        const HelloWorldPlugin = {
+            name: 'HelloWorldPlugin',
+            tabName: 'Hello World',
+
+            init() {},
+
+            render(container) {
+                container.innerHTML = `<div>Hello, World</div>`;
+            }
+        };
+
+        // Register the new plugin
+        PluginManager.register(HelloWorldPlugin, {visible: false});
+
+        const MessagesPlugin = {
+            name: 'MessagesPlugin',
+            tabName: 'System Messages',
+            
+            init() {
+                PluginManager.data.messages = ["System initialized."];
+            },
+            
+            render(container) {
+                container.innerHTML = '<ul>';
+                PluginManager.data.messages.forEach(message => {
+                    container.innerHTML += `<li>${message}</li>`;
+                });
+                container.innerHTML += '</ul>';
+            },
+
+            log(message) {
+                PluginManager.data.messages.push(message);
+                // If the active tab is the MessagesPlugin, re-render it to show the new message
+                if ( ! document.getElementById('tab-MessagesPlugin') ) {
+                    return;
+                } 
+                if (document.getElementById('tab-MessagesPlugin').classList.contains('active')) {
+                    this.render(pluginViewDiv);
+                }
+            }
+        };
+
+        PluginManager.register(MessagesPlugin, { visible: false });
+        
+        const ProverbsPlugin = {
+            name: 'ProverbsPlugin',
+            tabName: 'Proverbs',
+
+            data: [], // This will store the fetched proverbs data
+            currentChapter: 1,
+
+            init() {
+                fetch('./proverbs_tcuv.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch proverbs');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Group verses by chapter for easier navigation
+                        this.data = data.bible_verses.reduce((acc, verseGroup) => {
+                            const chapter = verseGroup[0].chapter;
+                            acc[chapter] = verseGroup;
+                            return acc;
+                        }, {});
+                    })
+                    .catch(error => {
+                        console.error('Error fetching proverbs:', error);
+                        MessagesPlugin.log(`Error fetching proverbs: ${error.message}`);
+                    });
+            },
+
+            render(container) {
+                container.innerHTML = ''; // Clear the container
+
+                // Add navigation buttons and dropdown
+                const navigation = document.createElement('div');
+                navigation.classList.add('proverbs-navigation');
+                navigation.style.display = 'flex';
+                navigation.style.justifyContent = 'center';
+                navigation.style.marginBottom = '20px';
+
+                const prevButton = document.createElement('button');
+                prevButton.innerText = '<<';
+                prevButton.addEventListener('click', () => {
+                    if (this.currentChapter > 1) {
+                        this.currentChapter--;
+                        this.render(container);
+                    }
+                });
+
+                const nextButton = document.createElement('button');
+                nextButton.innerText = '>>';
+                nextButton.addEventListener('click', () => {
+                    if (this.currentChapter < Object.keys(this.data).length) {
+                        this.currentChapter++;
+                        this.render(container);
+                    }
+                });
+
+                const chapterSelect = document.createElement('select');
+                for (let chapter in this.data) {
+                    const option = document.createElement('option');
+                    option.value = chapter;
+                    option.text = `Chapter ${chapter}`;
+                    chapterSelect.appendChild(option);
+                }
+                chapterSelect.value = this.currentChapter;
+                chapterSelect.addEventListener('change', (e) => {
+                    this.currentChapter = parseInt(e.target.value);
+                    this.render(container);
+                });
+
+                navigation.appendChild(prevButton);
+                navigation.appendChild(chapterSelect);
+                navigation.appendChild(nextButton);
+                container.appendChild(navigation);
+
+                // // Display verses
+                // const chapterData = this.data[this.currentChapter];
+                // chapterData.forEach(verse => {
+                //     const verseElement = document.createElement('p');
+                //     verseElement.textContent = `Verse ${verse.verse}: ${verse.text}`;
+                //     container.appendChild(verseElement);
+                // });
+
+                // Display verses
+                const chapterData = this.data[this.currentChapter];
+
+                // Focus Mode Button - Moved up to be after the navigation and before the verses
+                const focusModeButton = document.createElement('button');
+                focusModeButton.innerText = 'Focus Mode';
+                focusModeButton.classList.add('focus-mode-button'); 
+                focusModeButton.style.marginTop = '20px';
+                focusModeButton.style.marginBottom = '20px'; // added this for spacing between button and verses
+                focusModeButton.addEventListener('click', () => this.toggleFocusMode(container, true));
+                container.appendChild(focusModeButton);
+
+                // chapterData.forEach(verse => {
+                //     const verseElement = document.createElement('p');
+                //     verseElement.textContent = `Verse ${verse.verse}: ${verse.text}`;
+                //     container.appendChild(verseElement);
+                // });
+
+                chapterData.forEach(verse => {
+                    const verseElement = document.createElement('p');
+                    
+                    const verseNumberSpan = document.createElement('span');
+                    verseNumberSpan.className = 'verse-number';  // Add a class to style/toggle this element
+                    verseNumberSpan.textContent = `Verse ${verse.verse}: `;
+                    
+                    verseElement.appendChild(verseNumberSpan);
+                    verseElement.appendChild(document.createTextNode(verse.text)); // Append the verse text separately
+
+                    container.appendChild(verseElement);
+                });
+
+            },
+
+            toggleFocusMode(container, enable) {
+                const navigation = container.querySelector('.proverbs-navigation');  // Get the navigation div
+                const focusButton = container.querySelector('.focus-mode-button'); // Get the focus mode button
+
+                if (enable) {
+                    // Hide other elements
+                    document.querySelector('h1').style.display = 'none';  // Hide app title
+                    document.querySelector('h3').style.display = 'none';  // Hide "Plugins" header
+                    document.getElementById('tabs').style.display = 'none';  // Hide tabs
+                    navigation.style.display = 'none';  // Hide the navigation buttons
+                    focusButton.style.display = 'none';  // Hide the focus mode button
+                    document.querySelectorAll('.verse-number').forEach(verseNumber => verseNumber.style.display = 'none');
+                    
+                    // Stretch the container
+                    // container.style.width = '100%';
+                    // container.style.height = '100vh';
+                    // container.style.maxWidth = '100%';
+                    // container.style.overflowY = 'auto';
+                    // container.style.boxShadow = 'none';
+                    // container.style.borderRadius = '0';
+                    // container.style.padding = '30px';
+                    // container.style.backgroundColor = '#fff';
+                    
+                    // Add exit focus mode button at the bottom
+                    const exitButton = document.createElement('button');
+                    exitButton.innerText = 'Exit Focus Mode';
+                    exitButton.style.display = 'block';
+                    exitButton.style.margin = '20px auto';
+                    exitButton.addEventListener('click', () => this.toggleFocusMode(container, false));
+                    container.appendChild(exitButton);
+                } else {
+                    // Show other elements
+                    document.querySelector('h1').style.display = 'block';  // Show app title
+                    document.querySelector('h3').style.display = 'block';  // Show "Plugins" header
+                    document.getElementById('tabs').style.display = 'flex';  // Show tabs
+                    navigation.style.display = 'flex';  // Show the navigation buttons
+                    focusButton.style.display = 'inline-block';  // Show the focus mode button
+                    document.querySelectorAll('.verse-number').forEach(verseNumber => verseNumber.style.display = 'inline');
+
+                    // Reset container styles
+                    // container.removeAttribute('style');
+
+                    this.render(container);  // Re-render to show original content without the exit button
+                }
+            }
+        };
+
+        PluginManager.register(ProverbsPlugin);
+
+    </script>
+</body>
+
+</html>
