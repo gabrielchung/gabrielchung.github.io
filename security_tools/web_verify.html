@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ping Verification</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  #result { margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h2>Ping Verification</h2>
+<button id="verifyButton">Verify Ping</button>
+<button id="verifyButtonNeg">Verify Ping Negative</button>
+<div id="result"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Your JSON configuration
+  const config = {
+    "url": "https://gabrielchung.github.io/security_tools/ping.txt",
+    "text": "01234_56789"
+  };
+
+  // Reference to the result div and verify button
+  const resultDiv = document.getElementById('result');
+  const verifyButton = document.getElementById('verifyButton');
+
+  // Function to verify if the URL is accessible
+  function verifyPing(varNeg) {
+    fetch(config.url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(data => {
+        // Check if the response text matches the expected text
+        if(data.trim() === (config.text + (varNeg ? '!!!' : ''))) {
+          resultDiv.textContent = 'Ping verification success';
+          resultDiv.style.color = 'green';
+        } else {
+          resultDiv.textContent = 'Ping verification failed: Text does not match';
+          resultDiv.style.color = 'red';
+        }
+      })
+      .catch(error => {
+        resultDiv.textContent = 'Ping verification failed: ' + error.message;
+        resultDiv.style.color = 'red';
+      });
+  }
+
+  // Add click event listener to the verify button
+  verifyButton.addEventListener('click', function() {verifyPing(false)});
+  verifyButtonNeg.addEventListener('click', function() {verifyPing(true)});
+});
+</script>
+
+</body>
+</html>
